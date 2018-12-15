@@ -36,9 +36,7 @@
 	  })();
 	</script>
 
-	<script type="text/javascript">
-
-		var warmupApp = {
+    <script type="text/javascript">var warmupApp = {
 			"metric" : false,
 			barWeight : function() {
 				if ($.cookie('bar_type') == 'bar-type-standard')
@@ -75,13 +73,22 @@
 			});
 
 			$.ajax({
-				url: 'programs/program_2.json',
+				url: 'programs/five_by_five.json',
 				dataType: 'json',
 				success: function(data) {
 			    warmupApp.programs.push(data);
 				},
 				async: false
 			});
+
+            $.ajax({
+                url: 'programs/madcow.json',
+                dataType: 'json',
+                success: function(data) {
+                warmupApp.programs.push(data);
+                },
+                async: false
+            });
 
 			$.ajax({
 				url: 'programs/max_single.json',
@@ -101,7 +108,7 @@
 
 				warmupApp.metric = !warmupApp.metric;
 				$('input').attr('min', warmupApp.barWeight().toString());
-			
+
 				$(":input[min]").each(function() {
 					var currentMax = $(this).attr('max');
 
@@ -115,7 +122,7 @@
 				$('div').filter(function() {
 					return this.id.match(/-weight-container/);
 				}).trigger('change');
-					
+
 			});
 
 			$("input[name='bar-type']").change(function() {
@@ -130,8 +137,8 @@
 				var shortTitle = warmupApp.programs[i].title.toLowerCase().replace(/ /g, '-');
 
 				// generate homepage links
-				$('#programs').append('<p><a href="#' + shortTitle + 
-					'" data-role="button" id="' + shortTitle + 
+				$('#programs').append('<p><a href="#' + shortTitle +
+					'" data-role="button" id="' + shortTitle +
 					'-link">' + warmupApp.programs[i].title + '</a></p>');
 
 				//generate page for program
@@ -152,7 +159,7 @@
 				for (j = 0; j < warmupApp.programs[i].exercises.length; j++) {
 					shortExerciseName = warmupApp.programs[i].exercises[j].name.toLowerCase().replace(/ /g, '-');
 					$('#' + shortTitle + '-exercises').append(
-						'<p><a href="#' + shortTitle + "-" + shortExerciseName + '" data-role="button" id="' + 
+						'<p><a href="#' + shortTitle + "-" + shortExerciseName + '" data-role="button" id="' +
 						shortExerciseName + '-link">' + warmupApp.programs[i].exercises[j].name + '</a></p>');
 
 					if ($.cookie(shortExerciseName) != undefined)
@@ -194,11 +201,11 @@
 						var workout = warmupApp.programs[i].exercises[j].workouts[k];
 						var setWeight = findWeight(workout, $('#' + shortTitle + '-' + shortExerciseName + '-weight').val());
 
-						$('#' + shortTitle + "-" + shortExerciseName + '-warmup').append('<li>' + 
-							printSet(workout.sets, workout.reps, setWeight) + 
+						$('#' + shortTitle + "-" + shortExerciseName + '-warmup').append('<li>' +
+							printSet(workout.sets, workout.reps, setWeight) +
 							' (' + calculateBarbellWeights(setWeight) + ')</li>');
 					}
-				}							
+				}
 			}
 
 			initializePreferences();
@@ -229,7 +236,7 @@
 			if ($.cookie('units') != undefined) {
 				$('input[name="units"]').prop("checked", false);
 				try {
-					$('input[id="' + $.cookie('units') + '"]').prop("checked", true).checkboxradio("refresh");	
+					$('input[id="' + $.cookie('units') + '"]').prop("checked", true).checkboxradio("refresh");
 				}
 				catch (err) {
 					console.log(err);
@@ -261,11 +268,11 @@
 				var workout = workouts[i];
 				var setWeight = findWeight(workout, weight);
 
-				list.append('<li>' + 
-					printSet(workout.sets, workout.reps, setWeight) + 
+				list.append('<li>' +
+					printSet(workout.sets, workout.reps, setWeight) +
 					' (' + calculateBarbellWeights(setWeight) + ')</li>');
 			}
-			
+
 			try
 			{
 				list.listview('refresh');
@@ -301,33 +308,33 @@
 				else if (weight >= warmupApp.weights()[1]) {
 					weight_35 += 1;
 					weight -= warmupApp.weights()[1];
-					continue;					
+					continue;
 				}
 				else if (weight >= warmupApp.weights()[2]) {
 					weight_25 += 1;
 					weight -= warmupApp.weights()[2];
-					continue;					
+					continue;
 				}
 				else if (weight >= warmupApp.weights()[3]) {
 					weight_10 += 1;
 					weight -= warmupApp.weights()[3];
-					continue;					
+					continue;
 				}
 				else if (weight >= warmupApp.weights()[4]) {
 					weight_5 += 1;
 					weight -= warmupApp.weights()[4];
-					continue;					
+					continue;
 				}
 				else {
 					weight_2half += 1;
 					weight -= warmupApp.weights()[5];
-					continue;					
-				}				
+					continue;
+				}
 			}
 
 			var result = "";
 
-			if (weight_45 != 0) 
+			if (weight_45 != 0)
 				result += printWeightCountSubstring(weight_45, warmupApp.weights()[0].toString());
 			if (weight_35 != 0)
 				result += printWeightCountSubstring(weight_35, warmupApp.weights()[1].toString());
@@ -335,7 +342,7 @@
 				result += printWeightCountSubstring(weight_25, warmupApp.weights()[2].toString());
 			if (weight_10 != 0)
 				result += printWeightCountSubstring(weight_10, warmupApp.weights()[3].toString());
-			if (weight_5 != 0) 
+			if (weight_5 != 0)
 				result += printWeightCountSubstring(weight_5, warmupApp.weights()[4].toString());
 			if (weight_2half != 0)
 				result += printWeightCountSubstring(weight_2half, warmupApp.weights()[5].toString());
@@ -356,12 +363,12 @@
 			else
 				return exercise.weight;
 		}
-		
+
 		function printSet(sets, reps, weight) {
 			var output = sets + "x" + reps + " " + weight;
 			if (warmupApp.metric)
 				return output + " kgs"
-			else 
+			else
 				return output + " lbs"
 		}
 
@@ -370,9 +377,7 @@
 				return warmupApp.barWeight();
 			else
 				return num - (num % warmupApp.stepSize());
-		}		
-
-	</script>
+		}</script>
 </head> 
 
 	
